@@ -1,8 +1,8 @@
-var twitterInfo = require('keys.js');
+var twitterInfo = require('./keys.js');
  	
-var askSpotify = require('spotify');
-
 var request = require('request');
+
+var askSpotify = require('spotify');
 
 var fs = require('fs');
 
@@ -31,7 +31,7 @@ function cases() {
 
 function twentyTweets() {
 	var tweeter = {screen_name: 'RalrwaisRima'};
-	twitterInfo.twitterKeys.get('statuses/user/timeline', tweeter, function(error, tweets, response){
+	twitterInfo.get('statuses/user/timeline', tweeter, function(error, tweets, response){
 		if(!error) {
 			console.log('Your latest tweets: ');
 			for (var i = 0; i < 20; i++){
@@ -61,8 +61,8 @@ function movies() {
 	}
    })
   };
-
- function music() {
+  
+function music() {
 	 askSpotify.search({ type: 'track', query: userInput }, function(err, data) {
 		if(!err){
 			console.log("Here is that jam you requested: ");
@@ -75,5 +75,7 @@ function movies() {
 				}
 			};
 		})
+
+ cases();
 
 
