@@ -1,4 +1,4 @@
-var twitterInfo = require('./keys.js');
+var twitterInfo = require('keys.js');
  	
 var askSpotify = require('spotify');
 
@@ -19,7 +19,7 @@ function cases() {
 		music();
 		break;
 		case 'movie-this':
-		movieInfo();
+		movies();
 		break;
 		case 'do-what-it-says':
 		randomTxt();
@@ -43,26 +43,37 @@ function twentyTweets() {
 		}
 	)};
 
-function music() {
-	askSpotify.search({type: 'track', query: userInput} function(err, data) {
+
+function movies() {
+	 request('http://www.omdbapi.com/?t='+userInput+'&y=&plot=short&r=json&tomatoes=true', function (error, response, body){
+	if (!error) { 
+		body = JSON.parse(body);
+		console.log('Here is the movie info you requested: ')
+		console.log('Title: ' + body.Title);
+		console.log('Year: ' + body.Year);
+		console.log('Rating: ' + body.imdbRating);
+		console.log('Country: ' + body.Country);
+		console.log('Language: ' + body.Language);
+		console.log('Plot: ' + body.Plot);
+		console.log('Actors: ' + body.Actors);
+		console.log('Rotten Tomatoes Says: ' + body.tomatoRating);
+		console.log('Rotten Tomatoes: ' + body.tomatoURL);
+	}
+   })
+  };
+
+ function music() {
+	 askSpotify.search({ type: 'track', query: userInput }, function(err, data) {
 		if(!err){
-			console.log("Are any of these songs what you are looking for?");
-      		console.log("");
+			console.log("Here is that jam you requested: ");
      		 for (var i = 0; i < data.tracks.items.length; i++) {
 		        console.log("Song: " +data.tracks.items[i].name);
 		        console.log("Artist: " +data.tracks.items[i].artists[0].name);
 		        console.log("Album: "+data.tracks.items[i].album.name);
 		        console.log("Link: "+data.tracks.items[i].href);
-		        console.log("");
-		        var songInfo = {
-		          song: data.tracks.items[i].name,
-		          artist: data.tracks.items[i].artists[0].name,
-		          album: data.tracks.items[i].album.name,
-		          link: data.tracks.items[i].href
-		        };
+		        
 				}
 			};
-};
-
+		})
 
 
