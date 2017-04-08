@@ -1,4 +1,8 @@
-var twitterInfo = require('./keys.js', 'twitter');
+var twitterInfo = require('./keys.js');
+
+var twitterSearch = require('twitter');
+
+var twitterStuff = new twitterSearch(twitterInfo.twitterKeys);
  	
 var request = require('request');
 
@@ -30,12 +34,12 @@ function cases() {
 };
 
 function twentyTweets() {
-	var tweeter = {screen_name: 'RalrwaisRima'};
-	request('http://www.twitter.com/?q='+userInput+'xVzrSwWnGiJw1HH632meTgqze', tweeter, function(error, tweets, response){
-		if(!error) {
+	var tweeter = {screen_name: 'RalrwaisRima', count: 20};
+	twitterStuff.get('statuses/user_timeline', tweeter, function(error, tweets, response) {
+ 		 if (!error) {
 			console.log('Your latest tweets: ');
-			for (var i = 0; i < 20; i++){
-				console.log((i+1) + tweets[i]);
+			for (var i = 0; i < tweets.length; i++){
+				console.log(String(i +1) + " " + tweets[i].text);
 			}
 		}
 	})};
@@ -60,18 +64,15 @@ function movies() {
   };
 
 function music() {
-	 askSpotify.search({ type: 'track', query: userInput }, function(err, data) {
+	 askSpotify.search({ type: 'track', query: userInput}, function(err, data) {
 		if(!err){
 			console.log("Here is that jam you requested: ");
-     		 for (var i = 0; i < data.tracks.items.length; i++) {
-		        console.log("Song: " + data.tracks.items[i].name);
-		        console.log("Artist: " + data.tracks.items[i].artists[0].name);
-		        console.log("Link: "+ data.tracks.items[i].href);
-		        console.log("Album: "+ data.tracks.items[i].album.name);
-		        
-				}
+		        console.log("Song: " + data.tracks.items[0].name);
+		        console.log("Artist: " + data.tracks.items[0].artists[0].name);
+		        console.log("Link: "+ data.tracks.items[0].href);
+		        console.log("Album: "+ data.tracks.items[0].album.name); 
 			};
-		})};
+		})};	
 
 function randomTxt(){
   fs.readFile("./random.txt", "utf8", function(err, data){
