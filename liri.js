@@ -3,7 +3,7 @@ var twitterInfo = require('./keys.js');
 var twitterSearch = require('twitter');
 
 var twitterStuff = new twitterSearch(twitterInfo.twitterKeys);
- 	
+
 var request = require('request');
 
 var askSpotify = require('spotify');
@@ -39,7 +39,9 @@ function twentyTweets() {
  		 if (!error) {
 			console.log('Your latest tweets: ');
 			for (var i = 0; i < tweets.length; i++){
-				console.log(String(i +1) + " " + tweets[i].text);
+				// using the String constructor is unnecessary here since (i + 1)
+				// will be concatenated into a string regardless.
+				console.log((i + 1) + " " + tweets[i].text);
 			}
 		}
 	})};
@@ -66,18 +68,22 @@ function movies() {
 function music() {
 	 askSpotify.search({ type: 'track', query: userInput}, function(err, data) {
 		if(!err){
+			// when you find yourself accessing such a deeply nested piece of data
+			// you can go ahead and assign it to a variable for the sake of readability
+			var track = data.tracks.items[0]
 			console.log("Here is that jam you requested: ");
-		        console.log("Song: " + data.tracks.items[0].name);
-		        console.log("Artist: " + data.tracks.items[0].artists[0].name);
-		        console.log("Link: "+ data.tracks.items[0].href);
-		        console.log("Album: "+ data.tracks.items[0].album.name); 
+      console.log("Song: " + track.name);
+      console.log("Artist: " + track.artists[0].name);
+      console.log("Link: "+ track.href);
+      console.log("Album: "+ track.album.name); 
 			};
 		})};	
 
 function randomTxt(){
   fs.readFile("./random.txt", "utf8", function(err, data){
     if (!err) {
-      dataSplit = data.split(", ");
+    	// that extra space was causing your split data to just be a one item array of: [ 'spotify-this-song,"I Want it That Way"' ]
+      dataSplit = data.split(",");
       command = dataSplit[0];
       cases();
     };
